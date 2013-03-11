@@ -54,7 +54,8 @@
 -(void) open: (NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
 {
     NSString *callback = [options objectForKey:@"callback"];
-    NSString *dbname = [self getDBPath:[options objectForKey:@"name"]];
+    NSString *dbfile = [options objectForKey:@"name"];
+    NSString *dbname = [self getDBPath:dbfile];
     NSValue *dbPointer;
 
     if (dbname == NULL) {
@@ -73,7 +74,11 @@
     const char *name = [dbname UTF8String];
 
     NSLog(@"using db name: %@", dbname);
-
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:dbname]) {
+        [self copyPrepopulatedDatabase:dbfile withDbname:dbname];
+    }
+    
     if (sqlite3_open(name, &db) != SQLITE_OK) {
         [self respond:callback withString:@"{ message: 'Unable to open DB' }" withType:@"error"];
         return;
@@ -82,6 +87,20 @@
     dbPointer = [NSValue valueWithPointer:db];
     [openDBs setObject:dbPointer forKey: dbname];
     [self respond:callback withString: @"{ message: 'Database opened' }" withType:@"success"];
+}
+
+-(void)copyPrepopulatedDatabase:(NSString *)dbfile withDbname:(NSString *)dbname {
+    NSError *error;
+    NSString *resourcePath = [[NSBundle mainBundle] pathForResource:dbfile ofType:@".db"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:resourcePath]) {
+        BOOL success = [fileManager copyItemAtPath:resourcePath toPath:dbname error:&error];
+        
+        if(success)
+            NSLog(@"Copied prepopulated DB content to: %@", dbname);
+        else
+            NSLog(@"Unable to copy DB file: %@", [error localizedDescription]);
+    }
 }
 
 -(void) backgroundExecuteSqlBatch: (NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
@@ -237,7 +256,7 @@
         if (hasInsertId) {
             [resultSet setObject:insertId forKey:@"insertId"];
         }
-        [self respond:callback withString:[resultSet cdvjk_JSONString] withType:@"success"];
+        [self respond:callback withString:[resultSet JSONString] withType:@"success"];
     }
 }
 
