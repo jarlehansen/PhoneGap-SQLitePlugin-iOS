@@ -249,6 +249,10 @@ Then please raise an issue with the test program included in the description.
 
 Unit testing is done in `test-www/index.html`. To run the test(s) yourself please copy the files from `test-www` (`index.html`, `qunit-1.5.0.js`, & `qunit-1.5.0.css`) into the `www` directory of your iOS Cordova project and make sure you have SQLitePlugin completely installed (JS, Objective-C, and plugin registered).
 
+# Loading pre-populated database file
+
+To include a prepopulated db, simply create the .db-file and place it directly under your project. The first time the app runs it will automatically be copied to the correct location.
+
 # Extra Usage for this version
 
 **NOTE:** This is from an old sample, old API which is hereby deprecated **and going away**.
