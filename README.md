@@ -251,7 +251,7 @@ Unit testing is done in `test-www/index.html`. To run the test(s) yourself pleas
 
 # Loading pre-populated database file
 
-To include a prepopulated db, simply create the .db-file and place it directly under your project. The first time the app runs it will automatically be copied to the correct location.
+To include a prepopulated db simply create the .db-file and place it directly under your project. The first time the app runs it will automatically be copied to the correct location.
 
 # Extra Usage for this version
 
