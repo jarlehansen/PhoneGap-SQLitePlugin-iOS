@@ -74,8 +74,7 @@
     const char *name = [dbname UTF8String];
 
     NSLog(@"using db name: %@", dbname);
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:dbname]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dbname]) {
         [self copyPrepopulatedDatabase:dbfile withDbname:dbname];
     }
     
@@ -90,11 +89,11 @@
 }
 
 -(void)copyPrepopulatedDatabase:(NSString *)dbfile withDbname:(NSString *)dbname {
-    NSString *resourcePath = [[NSBundle mainBundle] pathForResource:dbfile ofType:@".db"];
+    NSString *prepopulatedDb = [[NSBundle mainBundle] pathForResource:dbfile ofType:@".db"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:resourcePath]) {
+    if([fileManager fileExistsAtPath:prepopulatedDb]) {
         NSError *error;
-        BOOL success = [fileManager copyItemAtPath:resourcePath toPath:dbname error:&error];
+        BOOL success = [fileManager copyItemAtPath:prepopulatedDb toPath:dbname error:&error];
         
         if(success)
             NSLog(@"Copied prepopulated DB content to: %@", dbname);
