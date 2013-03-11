@@ -90,10 +90,10 @@
 }
 
 -(void)copyPrepopulatedDatabase:(NSString *)dbfile withDbname:(NSString *)dbname {
-    NSError *error;
     NSString *resourcePath = [[NSBundle mainBundle] pathForResource:dbfile ofType:@".db"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if([fileManager fileExistsAtPath:resourcePath]) {
+        NSError *error;
         BOOL success = [fileManager copyItemAtPath:resourcePath toPath:dbname error:&error];
         
         if(success)
