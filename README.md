@@ -8,6 +8,8 @@ API changes by @brodyspark (Chris Brody)
 
 iOS nested transaction callback support by @ef4 (Edward Faulkner)
 
+Prepopulated DB support by Jarle Hansen
+
 License for this version: MIT
 
 ## Announcements
